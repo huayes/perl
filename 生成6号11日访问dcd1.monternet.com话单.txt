@@ -1,0 +1,107 @@
+wapcare@GDGZ-PS-SV001-WAP01$ cat sumurlgw1-gw9.pl
+#!/usr/bin/perl
+for(my $date=20110606;$date <=20110606;$date++)
+   {
+        open(FILE2,">/home/wapcare/shliang/sumgw1-gw9.url.dat") or die "can not open file:$!";
+  my $filelist=`ls /sas2/NokiaSAS/destdat/*GW00[1-9]*$date*`;
+  #$filelist =~ s/\n/ /g;
+  my @files = split "\n",$filelist;
+  #print @files;
+  foreach my $file (@files)
+     {
+        `gzcat $file>/home/wapcare/shliang/sumgw1-gw9.8.tmp.shliang`;
+        open(FILE,"/home/wapcare/shliang/sumgw1-gw9.8.tmp.shliang") or die "can not open $file:$!";
+        while(<FILE>)
+        {
+                my $line=$_;
+                if($line =~ /dcd1.monternet.com/)
+                  {
+                                print FILE2 $line;
+                        }
+                }
+     }
+     close FILE;
+   }  
+  unlink("/home/wapcare/shliang/sumgw1-gw9.8.tmp.shliang");
+  close FILE2;
+
+wapcare@GDGZ-PS-SV001-WAP01$ cat sumurlgw10-gw19.pl
+#!/usr/bin/perl
+for(my $date=20110606;$date <=20110606;$date++)
+   {
+        open(FILE2,">/home/wapcare/shliang/sumgw10-gw19.url.dat") or die "can not open file:$!";
+  my $filelist=`ls /sas2/NokiaSAS/destdat/*GW01[0-9]*$date*`;
+  #$filelist =~ s/\n/ /g;
+  my @files = split "\n",$filelist;
+  #print @files;
+  foreach my $file (@files)
+     {
+        `gzcat $file>/home/wapcare/shliang/sumgw10-gw19.8.tmp.shliang`;
+        open(FILE,"/home/wapcare/shliang/sumgw10-gw19.8.tmp.shliang") or die "can not open $file:$!";
+        while(<FILE>)
+        {
+                my $line=$_;
+                if($line =~ /dcd1.monternet.com/)
+                  {
+                                print FILE2 $line;
+                        }
+                }
+     }
+     close FILE;
+   }  
+  unlink("/home/wapcare/shliang/sumgw10-gw19.8.tmp.shliang");
+  close FILE2;
+
+wapcare@GDGZ-PS-SV001-WAP01$ cat sumurlgw20-gw29.pl
+#!/usr/bin/perl
+for(my $date=20110606;$date <=20110606;$date++)
+   {
+        open(FILE2,">/home/wapcare/shliang/sumgw20-gw29.url.dat") or die "can not open file:$!";
+  my $filelist=`ls /sas2/NokiaSAS/destdat/*GW02[0-9]*$date*`;
+  #$filelist =~ s/\n/ /g;
+  my @files = split "\n",$filelist;
+  #print @files;
+  foreach my $file (@files)
+     {
+        `gzcat $file>/home/wapcare/shliang/sumgw20-gw29.8.tmp.shliang`;
+        open(FILE,"/home/wapcare/shliang/sumgw20-gw29.8.tmp.shliang") or die "can not open $file:$!";
+        while(<FILE>)
+        {
+                my $line=$_;
+                if($line =~ /dcd1.monternet.com/)
+                  {
+                                print FILE2 $line;
+                        }
+                }
+     }
+     close FILE;
+   }  
+  unlink("/home/wapcare/shliang/sumgw20-gw29.8.tmp.shliang");
+  close FILE2;
+
+wapcare@GDGZ-PS-SV001-WAP01$ cat sumurlgwgw30-gw35.pl
+#!/usr/bin/perl
+for(my $date=20110606;$date <=20110606;$date++)
+   {
+        open(FILE2,">/home/wapcare/shliang/sumgw30-gw35.url.dat") or die "can not open file:$!";
+  my $filelist=`ls /sas2/NokiaSAS/destdat/*GW03[0-5]*$date*`;
+  #$filelist =~ s/\n/ /g;
+  my @files = split "\n",$filelist;
+  #print @files;
+  foreach my $file (@files)
+     {
+        `gzcat $file>/home/wapcare/shliang/sumgw30-gw35.8.tmp.shliang`;
+        open(FILE,"/home/wapcare/shliang/sumgw30-gw35.8.tmp.shliang") or die "can not open $file:$!";
+        while(<FILE>)
+        {
+                my $line=$_;
+                if($line =~ /dcd1.monternet.com/)
+                  {
+                                print FILE2 $line;
+                        }
+                }
+     }
+     close FILE;
+   }  
+  unlink("/home/wapcare/shliang/sumgw30-gw35.8.tmp.shliang");
+  close FILE2;

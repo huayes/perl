@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+open(FILE5,"/tmp/20110521.500.dat") or die "can not open $FILE5:$!";
+open(FILE6,">/tmp/testfile.shliang.txt") or die "can not open FILE5:$!";
+my $num=100;
+while(<FILE5>)
+    {
+      my $line=$_;
+      if($num>0)
+      {
+      print FILE6 $line;
+      }
+      $num--;
+    }
+close FILE5;
+close FILE6;
+#生成文件/tmp/test.500.dat，然后用vi打开，测试文件是不是一行一行

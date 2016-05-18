@@ -1,0 +1,57 @@
+Perl实现ssh自动登录
+发表于 2011 年 07 月 28 日 由 steptodream
+
+一，基于单纯的密码验证的情况：
+1.安装Net::SSH::Perl模块，安装方法参照Perl模块安装。
+2.自动登录例子，我要用testuser用户登陆到服务器192.168.0.100执行df命令：
+
+#!/usr/bin/perl -w
+use strict;
+use Net::SSH::Perl;
+ 
+my $host = '192.168.0.100';
+my $user = 'testuser';
+my $password = '123456';
+ 
+my $ssh = Net::SSH::Perl->new($host);
+$ssh->login($user,$password);
+my ($stdout,$stderr,$exit) = $ssh->cmd("df -h");
+$ssh->cmd("exit");
+if($stderr){
+   print "ErrorCode:$exit\n";
+   print "ErrorMsg:$stderr";
+} else {
+   print $stdout;
+}
+exit $exit;
+
+二，基于带密码（passphrase）的公钥密钥对认证的情况：
+1.安装Net::OpenSSH模块，安装方法参照Perl模块安装，其实这个模块比上面那个模块更强大，密码登录的也可以用这个模块。
+2.代码例子，还是用testuser用户登陆到服务器192.168.0.100执行df命令：
+	
+#!/usr/bin/perl -w
+use strict;
+use Net::OpenSSH;
+ 
+my $host = '192.168.0.100';
+my $user = 'testuser';
+my $passphrase = '123123';
+my $key = '/home/testuser/.ssh/id_rsa';
+ 
+my %param = (
+    user => $user,
+    passphrase => $passphrase,
+    key_path => $key,
+    timeout => 10
+);
+ 
+my $ssh = Net::OpenSSH->new($host,%param);
+my ($stdout,$stderr) = $ssh->capture2("df -h");
+if($stdout){
+    print $stdout;
+} else {
+    print $ssh->error;
+    $stderr and print $stderr;
+}
+
+非常简单的脚本，我就不解释了，你可以去CPAN网站上参照这些模块的使用说明，来填加更多的功能以满足你的需求。

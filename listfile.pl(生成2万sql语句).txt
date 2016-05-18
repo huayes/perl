@@ -1,0 +1,10 @@
+[liangsh@DmuspReleaseSql5 ~]$ cat listfile.pl 
+#!/usr/bin/perl -w
+my $time=10;
+my $start=1;
+my $end=20000;
+for($i=1;$i<=$time;$i++){
+print "insert into ChannelBlackList_new select BsBlackListSno,Phone,UpdateTime from BaseBlackList where BsBlackListSno BETWEEN $start and $end;\n";
+$start+=20000;
+$end+=20000;
+ }

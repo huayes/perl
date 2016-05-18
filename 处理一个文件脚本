@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+open(FILE,">/tmp/500_zxli.dat") or die "can not open file:$!";
+print FILE "sum\twap1x_sum\twap1x_500_sum\n";
+$date=20110324;
+	my $sum=0,$wap1x_sum=0,$wap1x_500_sum=0;
+	open(FILE2,">/tmp/${$date}.500.dat") or die "can not open file:$!";
+ 
+ `zcat /tmp/GDSZ-PS-WAP3-GW01-CF0001-20110324030104.dat.gz > /tmp/${date}.tmp.zxli`;
+   
+    open(FILE3,"/tmp/${date}.tmp.zxli") or die "can not open $file:$!";
+
+        while(<FILE3>)
+        {
+                my $line=$_;
+                $sum++;
+                if($line =~ /,[1-4],\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/)
+                {
+                	$wap1x_sum++;
+                	if($line =~ /,500,[1-4],\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/){
+                		$wap1x_500_sum++;
+                		print FILE2 $line;
+                		}
+                }
+               }	
+        close FILE3;
+    
+     
+  print FILE "$sum\t$wap1x_sum\t$wap1x_500_sum\n";
+
+close FILE2;
+close FILE;

@@ -1,0 +1,83 @@
+Perl通过Socks代理发送邮件
+发表于 2011 年 10 月 17 日 由 steptodream
+
+前段时间写了一篇关于Perl发送邮件的博客，有读者联系我说，希望能通过Socks代理的方式发送，并给了我一些参考文件，今天抽空测试了一下，要使用Socks代理连接，我们需要Net::SOCKS这个模块，基本代码如下。
+
+#!/usr/bin/perl -w
+use strict;
+use Net::SMTP_auth;
+use Net::SOCKS;
+
+#smtp邮件服务器和端口
+my $smtpHost = 'smtp.163.com';
+my $smtpPort = '25';
+my $sslPort = '465';
+
+#auth info to connect socks server
+my $socksServer = 'x.x.x.x';
+my $socksUser   = 'username';
+my $socksPass   = 'password';
+my $socksPort   = '1080';
+
+#smtp服务器认证用户名密码(就是你登陆邮箱的时候的用户名和密码)
+my $username = 'user@163.com';
+my $passowrd = 'password';
+
+#邮件来自哪儿，要去哪儿,邮件标题
+my $from = 'from@163.com';
+my $to   = 'to@somedomain.com';
+my $subject = '[Notice]TEST MAIL';
+
+#设置邮件header
+my $header = << "MAILHEADER";
+From:$from
+To:$to
+Subject:$subject
+Mime-Version:1.0
+Content-Type:text/plain;charset="UTF-8"
+Content-Trensfer-Encoding:7bit
+
+MAILHEADER
+
+#设置邮件内容
+my $message = << "MAILBODY";
+TEST MAILBODY
+MAILBODY
+
+#获得邮件域名部分，用于连接的时候表名身份
+my @helo = split /\@/,$from;
+
+#连接到socks服务器
+my $sock = new Net::SOCKS(socks_addr => $socksServer,
+                socks_port => $socksPort,
+                user_id => $socksUser,
+                user_password => $socksPass,
+                protocol_version => 5);
+
+#通过socks代理与smtp服务器建立连接
+my $sockfd = $sock->connect(
+		peer_addr => $smtpHost,
+		peer_port => $smtpPort
+) || die "通过Socks代理连接到$smtpHost失败!";
+
+#通过socks代理与smtp的连接句柄，与smtp服务器通信并验证用户
+my $smtpHandle = Net::SMTP_auth->new_from_fd(
+                $sockfd,
+                'r+'
+                ) or die("Error:拷贝连接handle失败！");
+$smtpHandle->getline();
+$smtpHandle->hello($helo[1]);
+$smtpHandle->auth('LOGIN',$username,$passowrd) or die("Error:认证失败！");
+
+#发送邮件
+$smtpHandle->mail($from);
+$smtpHandle->to($to);
+$smtpHandle->data();
+$smtpHandle->datasend($header);
+$smtpHandle->datasend($message);
+$smtpHandle->dataend();
+$smtpHandle->quit();
+
+print "OK";
+$sock->close();
+exit 0;
